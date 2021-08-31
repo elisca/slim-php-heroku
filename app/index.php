@@ -1,21 +1,24 @@
 <?php
-	$lapicera01=array('color'=>'azul','trazo'=>'normal','precio'=>20);
-	$lapicera02=array('color'=>'rojo','trazo'=>'fino','precio'=>18);
-	$lapicera03=array('color'=>'verde','trazo'=>'grueso','precio'=>16);
+error_reporting(-1);
+ini_set('display_errors', 1);
 
-	$asocLapiceras=array('lap01'=>$lapicera01,'lap02'=>$lapicera02,'lap03'=>$lapicera03);
-	$indexLapiceras=array($lapicera01,$lapicera02,$lapicera03);
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Factory\AppFactory;
+use Slim\Routing\RouteCollectorProxy;
 
-	//Array asociativo
-	echo "ARRAY ASOCIATIVO<br>";
+require __DIR__ . '/../vendor/autoload.php';
 
-	foreach ($asocLapiceras as $clave => $lapicera)
-		foreach ($lapicera as $claveLap => $valorLapicera)
-			echo $claveLap . " " . $valorLapicera . "<br>";
+// Instantiate App
+$app = AppFactory::create();
 
-	//Array indexado
-		echo "ARRAY INDEXADO<br>";
-	foreach ($indexLapiceras as $lapicera)
-		foreach ($lapicera as $claveLap => $valorLapicera)
-			echo $claveLap . " " . $valorLapicera . "<br>";
-?>
+// Add error middleware
+$app->addErrorMiddleware(true, true, true);
+
+$app->get('[/]', function (Request $request, Response $response) {    
+    $response->getBody()->write("GET => Bienvenido!!! a SlimFramework");
+    return $response;
+
+});
+
+$app->run();
